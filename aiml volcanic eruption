@@ -1,0 +1,30 @@
+import serial
+import time
+import winsound   # For sound (Windows)
+
+# Connect to Arduino (Change COM port)
+arduino = serial.Serial('COM3', 9600)
+time.sleep(2)
+
+gas_threshold = 300
+
+while True:
+    if arduino.in_waiting > 0:
+        data = arduino.readline().decode('utf-8').strip()
+        
+        try:
+            gas_value = int(data)
+            print(f"Gas Level: {gas_value}")
+            
+            if gas_value > gas_threshold:
+                print("🌋 ERUPTION DETECTED!")
+                print("⚠️ Environmental Pollution Rising!")
+                
+                # Sound alert
+                winsound.Beep(1000, 500)
+                
+            else:
+                print("Environment Stable ✅")
+                
+        except:
+            pass
